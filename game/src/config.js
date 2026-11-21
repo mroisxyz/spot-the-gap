@@ -1,61 +1,21 @@
-// Every tuning number and colour in one place. The playfield is a fixed 1280x720 logical area;
-// the renderer scales it to the window, so no rule below depends on the screen size.
+// Shared numbers for the puzzle. The canvas has a fixed logical size; CSS is free to scale it,
+// so every hit test, marker and scene coordinate lives in this one small space.
+export const VIEW = Object.freeze({ width: 600, height: 420 });
 
-export const FIELD = { width: 1280, height: 720, groundY: 664 };
+export const DIFFERENCES_PER_SCENE = 7;
+export const HINTS_PER_SCENE = 2;
+export const CURSOR_STEP = 22;
 
-/** The simulation's fixed step, in seconds: 60 updates a second whatever the display's rate. */
-export const STEP = 1 / 60;
+/** Seconds allowed per scene. Each scene is a little tighter than the last. */
+export const TIME_LIMITS = Object.freeze([125, 115, 105]);
 
-export const PLAYER = {
-  width: 72,
-  height: 24,
-  speed: 560,
-  invulnerable: 1.5,
-};
+/** How long a hint ring and the little celebration effects stay on screen, in seconds. */
+export const HINT_SECONDS = 2.6;
+export const MARK_SECONDS = 0.75;
+export const MISS_SECONDS = 0.6;
 
-export const LIVES = 3;
+/** Radius, in logical pixels, around a change where a click counts as a find. */
+export const HIT_RADIUS = 30;
 
-export const BLOCK = {
-  minWidth: 40,
-  maxWidth: 110,
-  height: 36,
-  speed: 240,
-  speedPerLevel: 30,
-  speedJitter: 90,
-  interval: 0.55,
-  intervalScale: 0.88,
-  minInterval: 0.14,
-  dodgePoints: 1,
-};
-
-export const COIN = {
-  size: 24,
-  speed: 190,
-  speedPerLevel: 14,
-  interval: 1.4,
-  intervalJitter: 0.8,
-  points: 10,
-};
-
-/** Seconds of play per level, and the last level: speeds and spawn rates stop growing there. */
-export const LEVEL = { seconds: 12, max: 12 };
-
-/** How many falling things can exist at once; the pool is allocated once, at boot. */
-export const POOL_SIZE = 64;
-
-export const PALETTE = {
-  backdrop: '#11141b',
-  sky: '#1b1f2a',
-  ground: '#2a3040',
-  player: '#4fc3f7',
-  block: '#e5534b',
-  coin: '#f2c94c',
-  panel: '#252b38',
-  text: '#eef1f5',
-  muted: '#8b93a3',
-};
-
-export const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
-
-/** Where the best score is kept between visits (this browser only). */
-export const BEST_KEY = 'block-dodger.best';
+/** The fixed seed: a scene is drawn byte-for-byte the same on both panels and on every run. */
+export const SCENE_SEED = 20261121;

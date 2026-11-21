@@ -3,17 +3,107 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Block Dodger</title>
-<style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #11141b; }
-  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
-  /* Read aloud, never shown: the status line screen readers announce. */
-  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-</style>
+<title>Spot the Gap — three hand-drawn picture puzzles</title>
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<canvas id="game" aria-label="Block Dodger: move the paddle left and right to dodge falling blocks and catch coins"></canvas>
-<p id="status" role="status" aria-live="polite"></p>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span></span></div>
+      <div class="brand-copy">
+        <h1>SPOT THE GAP</h1>
+        <p>Three little worlds &middot; seven quiet changes in each</p>
+      </div>
+    </div>
+    <div class="scene-id">
+      <span class="eyebrow">NOW VIEWING</span>
+      <span id="scene-step" class="scene-step">01 / 03</span>
+      <strong id="scene-name">Lantern Canal</strong>
+    </div>
+  </header>
+
+  <section class="hud" aria-label="Game status">
+    <div class="hud-card remaining-card">
+      <span class="hud-label">STILL HIDDEN</span>
+      <div class="remaining-line"><span id="remaining">7</span><span class="remaining-unit">/ 7 differences</span></div>
+      <div id="remaining-dots" class="dot-row" aria-hidden="true"></div>
+    </div>
+    <div class="hud-card timer-card">
+      <span class="hud-label">TIME ON THE CLOCK</span>
+      <div class="timer-line"><span id="timer">2:00</span><span id="timer-flag" class="timer-flag">take your time</span></div>
+      <div class="time-track"><div id="time-fill" class="time-fill"></div></div>
+    </div>
+    <div class="hud-card small-card">
+      <span class="hud-label">MISSES</span>
+      <span id="misses" class="big-small">0</span>
+      <span class="hud-foot">wrong clicks</span>
+    </div>
+    <button id="hint-button" class="hint-button" type="button">
+      <span class="hint-icon" aria-hidden="true">&#10022;</span>
+      <span class="hint-copy"><span class="hud-label">HINT</span><span class="hud-foot">show one spot</span></span>
+      <span id="hints-left" class="hint-count">2</span>
+      <kbd>H</kbd>
+    </button>
+  </section>
+
+  <main class="boards">
+    <section class="board" aria-label="Reference picture">
+      <div class="board-label">
+        <span class="tag tag-ref">REFERENCE</span>
+        <span class="board-note">the picture as it should be</span>
+      </div>
+      <div class="frame frame-left">
+        <canvas id="left-canvas" width="600" height="420" aria-label="Reference picture, unchanged"></canvas>
+        <div class="corner corner-tl" aria-hidden="true"></div>
+        <div class="corner corner-br" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="board" aria-label="Picture to search">
+      <div class="board-label">
+        <span class="tag tag-edit">YOUR COPY</span>
+        <span class="board-note">click the right picture where it differs</span>
+      </div>
+      <div class="frame frame-right">
+        <canvas id="right-canvas" width="600" height="420" aria-label="Search this picture for seven differences"></canvas>
+        <div class="corner corner-tl" aria-hidden="true"></div>
+        <div class="corner corner-br" aria-hidden="true"></div>
+        <div id="results" class="results" hidden>
+          <div class="results-glow" aria-hidden="true"></div>
+          <span id="results-kicker" class="results-kicker">SCENE CLEARED</span>
+          <h2 id="results-title">Lantern Canal</h2>
+          <p id="results-line" class="results-line">All seven differences found.</p>
+          <div class="results-stats">
+            <div><span id="result-time">1:12</span><small>time left</small></div>
+            <div><span id="result-misses">1</span><small>misses</small></div>
+            <div><span id="result-stars">&#9733;&#9733;&#9733;</span><small>rating</small></div>
+          </div>
+          <div class="results-actions">
+            <button id="results-next" class="primary-button" type="button">Next scene <kbd>N</kbd></button>
+            <button id="results-retry" class="quiet-button" type="button">Play again <kbd>R</kbd></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="toolbar">
+    <div class="keys" aria-label="Keyboard controls">
+      <span><kbd>&larr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd><kbd>&rarr;</kbd> move</span>
+      <span><kbd>Enter</kbd> mark</span>
+      <span><kbd>H</kbd> hint</span>
+      <span><kbd>N</kbd> next</span>
+      <span><kbd>R</kbd> restart</span>
+    </div>
+    <div class="actions">
+      <span id="toast" class="toast">Look closely &mdash; then click the right-hand picture.</span>
+      <button id="restart-btn" class="quiet-button" type="button">Restart</button>
+      <button id="next-btn" class="primary-button" type="button">Next scene</button>
+    </div>
+  </footer>
+  <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+</div>
 <script type="module" src="./src/main.js"></script>
 </body>
 </html>
